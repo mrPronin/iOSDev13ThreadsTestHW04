@@ -7,6 +7,13 @@
 //
 
 #import "RITAppDelegate.h"
+#import "RITStudent.h"
+
+@interface RITAppDelegate ()
+
+@property (strong, nonatomic) NSMutableArray* students;
+
+@end
 
 @implementation RITAppDelegate
 
@@ -16,6 +23,26 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    // initial values
+    NSInteger       theAnswer   = 33;
+    NSInteger       leftValue   = 0;
+    NSInteger       rightValue  = 10000000;
+    
+    // declare block for print results
+    void (^resultBlock)(NSString*, NSInteger, CGFloat) = ^(NSString* name, NSInteger answer, CGFloat time) {
+        NSLog(@"%@ found the right answer: %d in %f seconds!", name, answer, time);
+    };
+    
+    self.students = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 5; i++) {
+        RITStudent* student = [[RITStudent alloc] init];
+        [self.students addObject:student];
+        student.name = [NSString stringWithFormat:@"Student%02d", i + 1];
+        [student guessTheAnswer:theAnswer withRangeFromLeft:leftValue toRight:rightValue andResultBlock:resultBlock];
+    }
+    
     return YES;
 }
 
